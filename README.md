@@ -1,141 +1,103 @@
-# Windows Driver Updater 🚀
+# Windows Driver Updater v3.1
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PowerShell](https://img.shields.io/badge/PowerShell-%235391FE.svg?style=flat&logo=powershell&logoColor=white)](https://github.com/PowerShell/PowerShell)
 [![Windows](https://img.shields.io/badge/Windows-0078D6?style=flat&logo=windows&logoColor=white)](https://www.microsoft.com/windows)
 
-A modern, user-friendly PowerShell GUI application for updating Windows drivers automatically. Built with efficiency and simplicity in mind.
+A PowerShell GUI tool to check, download, and install Windows driver updates with logging, filtering, scheduling, and silent automation support.
 
 ![Driver Updater Screenshot](https://raw.githubusercontent.com/CHXRITH/DriverUpdate/main/screenshot.png)
 
-## 🌟 Features
+## Features
 
-- **Modern GUI Interface**: Clean and intuitive design
-- **Real-time Progress Tracking**: Visual progress bar and detailed status updates
-- **Automatic Module Installation**: Auto-installs required PowerShell modules
-- **Smart Error Handling**: Comprehensive error detection and reporting
-- **One-Click Installation**: Quick installation via PowerShell command
-- **Administrator Rights Check**: Automatic verification of required permissions
-- **Cancel Operation Support**: Safely cancel ongoing updates
-- **Detailed Logging**: Real-time update status and driver information
+- Modern WinForms UI with dark/light theme
+- Multi-language interface (`en`, `es`, `fr`, `de`, `pt`, `it`)
+- **New in v3.1:** guided **Update Wizard** (step-by-step flow)
+- **New in v3.1:** dedicated **Install Updates** action for driver updates
+- Driver update check with manufacturer/class filters
+- Driver backup and install-from-folder (`.inf`) support
+- Update history and per-task log files
+- Proxy settings and persistent app settings
+- Scheduled **auto-install** task support
+- Cooperative cancel with temporary file cleanup
 
-## 🚀 Quick Installation
-
-Run this command in PowerShell (as Administrator):
-
-```powershell
-irm https://raw.githubusercontent.com/CHXRITH/DriverUpdate/main/DriverUpdate.ps1 | iex
-```
-
-## 📋 Prerequisites
+## Requirements
 
 - Windows 10 or Windows 11
-- PowerShell 5.1 or later
+- PowerShell 5.1+
 - Administrator privileges
-- Internet connection
+- Internet connection for update checks/downloads
 
-## 📥 Manual Installation
+## Run
 
-1. Clone the repository:
+Run one of the scripts as Administrator:
+
 ```powershell
-git clone https://github.com/CHXRITH/DriverUpdate.git
+powershell -ExecutionPolicy Bypass -File .\DriveUpdateV3.1.ps1
 ```
 
-2. Navigate to the directory:
+Legacy script still available:
+
 ```powershell
-cd DriverUpdate
+powershell -ExecutionPolicy Bypass -File .\DriveUpdateV3.ps1
 ```
 
-3. Run the script as Administrator:
+## v3.1 Workflow
+
+1. Open the app as Administrator
+2. Run **Update Wizard** (`F5`) for guided update flow
+3. Or use:
+   - **Check Driver Updates** (`F6`)
+   - **Install Updates** (`F8`)
+   - **Scan Installed Drivers** (`F7`)
+4. Use **Tools** for restore point, filters, schedule, and history
+5. Check logs in `Documents\The CHARITH_DriverUpdater`
+
+## Silent Mode
+
+General format:
+
 ```powershell
-powershell -ExecutionPolicy Bypass -File DriverUpdate.ps1
+.\DriveUpdateV3.1.ps1 -Silent -Task "<TaskName>"
 ```
 
-## 🛠️ How It Works
+Available tasks:
 
-1. **Administrator Check**: Verifies administrative privileges
-2. **Module Installation**: Automatically installs required PSWindowsUpdate module
-3. **Driver Scan**: Scans system for available driver updates
-4. **Update Process**: Downloads and installs available updates
-5. **Status Report**: Provides detailed completion status
+- `WindowsUpdate`
+- `CheckDriverUpdates`
+- `InstallDriverUpdates` (new in v3.1)
+- `ScanDrivers`
 
-## 🔒 Security Features
+Examples:
 
-- Administrator privileges verification
-- Secure PowerShell module installation
-- Microsoft-signed driver verification
-- Safe update process with rollback capability
-- Protected execution policy handling
+```powershell
+.\DriveUpdateV3.1.ps1 -Silent -Task "CheckDriverUpdates"
+.\DriveUpdateV3.1.ps1 -Silent -Task "InstallDriverUpdates"
+.\DriveUpdateV3.1.ps1 -Silent -Task "ScanDrivers"
+```
 
-## 🤝 Contributing
+Optional filter/proxy parameters:
 
-Contributions are welcome! Here's how you can help:
+```powershell
+.\DriveUpdateV3.1.ps1 -Silent -Task "InstallDriverUpdates" -FilterManufacturer "Intel" -FilterClass "Display" -ProxyAddress "http://proxy:8080"
+```
 
-1. Fork the repository
-2. Create a feature branch: `git checkout -b new-feature`
-3. Commit changes: `git commit -am 'Add new feature'`
-4. Push to branch: `git push origin new-feature`
-5. Submit a Pull Request
+## Scheduled Auto-Install
 
-## 🐛 Bug Reports
+The schedule feature now creates an automatic driver install task (silent mode with `InstallDriverUpdates`) at the selected frequency and time.
 
-Found a bug? Please open an issue with:
-- Detailed description of the problem
-- Steps to reproduce
-- Expected vs actual behavior
-- Screenshots if applicable
-- System information
+## Version History
 
-## 📝 License
+- **v3.1**
+  - Added Update Wizard flow
+  - Added Install Updates action (GUI + silent mode)
+  - Added cache reuse for recent update checks before install
+  - Improved cancellation with cancel token and temp cleanup
+  - Updated schedule behavior to auto-install driver updates
+- **v3.0**
+  - Added multi-language support
+  - Added settings, filters, history, and proxy support
+  - Added backup/install-from-folder and restore point actions
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## License
 
-## 🙏 Acknowledgments
-
-- PSWindowsUpdate module developers
-- PowerShell community
-- Windows Update API
-- All contributors and testers
-
-## 👨‍💻 Author
-
-**CHXRITH**
-- GitHub: [@CHXRITH](https://github.com/CHXRITH)
-
-## 📊 Version History
-
-- **v1.0.0** (2024-01-20)
-  - Initial release
-  - Basic GUI implementation
-  - Driver update functionality
-  - Error handling
-  - Progress tracking
-
-## 🔮 Future Plans
-
-- [ ] Dark mode support
-- [ ] Multiple language support
-- [ ] Scheduled updates
-- [ ] Backup and restore points
-- [ ] Update history logging
-- [ ] Network proxy support
-- [ ] Silent mode operation
-- [ ] Custom update filters
-
-## 💡 Usage Tips
-
-1. **Always backup**: Create a system restore point before updating drivers
-2. **Review updates**: Check the list of available updates before installing
-3. **Stable connection**: Ensure stable internet during the update process
-4. **System requirements**: Close other applications during updates
-5. **Recovery preparation**: Have recovery media ready just in case
-
-## ⚠️ Important Notes
-
-- Always run as administrator
-- Requires reliable internet connection
-- Some updates may require system restart
-- Compatible with Windows 10 and 11 only
-- Updates from Microsoft official sources only
-
----
-Made with 💜 by CHXRITH | Last updated: October 2024
+This project is licensed under the MIT License. See `LICENSE` for details.
