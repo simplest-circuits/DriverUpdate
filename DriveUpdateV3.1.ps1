@@ -13,6 +13,11 @@ param(
     [string]$FilterManufacturer = ""
 )
 
+$script:StartupBoundParameters = @{}
+foreach ($entry in $PSBoundParameters.GetEnumerator()) {
+    $script:StartupBoundParameters[$entry.Key] = $entry.Value
+}
+
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
@@ -376,6 +381,36 @@ $global:CurrentLanguage = $Language
 # -------------------------
 function Assert-AdminPrivilege {
     if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+        $scriptPath = $PSCommandPath
+        if (-not $scriptPath) { $scriptPath = $MyInvocation.PSCommandPath }
+
+        if ($scriptPath) {
+            $argParts = @("-ExecutionPolicy Bypass", "-File `"$scriptPath`"")
+
+            foreach ($key in $script:StartupBoundParameters.Keys) {
+                $value = $script:StartupBoundParameters[$key]
+                if ($value -is [switch]) {
+                    if ($value.IsPresent) { $argParts += "-$key" }
+                } elseif ($value -is [bool]) {
+                    if ($value) { $argParts += "-$key" }
+                } else {
+                    $escaped = "$value".Replace("'", "''")
+                    $argParts += "-$key '$escaped'"
+                }
+            }
+
+            try {
+                Start-Process -FilePath "powershell.exe" -Verb RunAs -ArgumentList ($argParts -join " ") | Out-Null
+                exit 0
+            } catch {
+                # UAC was declined or elevation could not start.
+                if (-not $Silent) {
+                    [System.Windows.Forms.MessageBox]::Show((Get-LocalizedString "PermissionError"), "Permission Error", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Error)
+                }
+                exit 1
+            }
+        }
+
         if (-not $Silent) {
             [System.Windows.Forms.MessageBox]::Show((Get-LocalizedString "PermissionError"), "Permission Error", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Error)
         }

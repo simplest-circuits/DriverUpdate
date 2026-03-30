@@ -6,13 +6,15 @@ This README documents only functionality present in `DriveUpdateV3.1.ps1`.
 
 - Windows 10/11
 - PowerShell 5.1 or newer
-- Administrator privileges (script exits otherwise)
+- UAC permission to elevate when prompted
 
 ## Start
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\DriveUpdateV3.1.ps1
 ```
+
+If started without admin rights, the script now triggers a UAC prompt and relaunches itself as Administrator with the same startup parameters.
 
 ## Script Parameters
 
@@ -22,6 +24,14 @@ powershell -ExecutionPolicy Bypass -File .\DriveUpdateV3.1.ps1
 - `-ProxyAddress` (string): proxy URL
 - `-FilterClass` (string): driver class filter
 - `-FilterManufacturer` (string): manufacturer filter
+
+## Startup Elevation Behavior
+
+- Checks for Administrator rights at startup.
+- If not elevated, relaunches itself with `powershell.exe -Verb RunAs`.
+- Preserves provided startup arguments (for example: `-Silent`, `-Task`, `-Language`, `-ProxyAddress`, `-FilterClass`, `-FilterManufacturer`).
+- Original non-admin process exits after handing off to elevated process.
+- If UAC is canceled, startup is aborted.
 
 ## Implemented GUI Functionality
 

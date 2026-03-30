@@ -53,6 +53,12 @@ This PR contains only the delta from `DriveUpdateV3.ps1` (v3.0) to `DriveUpdateV
 - Version label updated from `v3.0` to `v3.1`.
 - Minor theme/toolbar visual consistency adjustments.
 
+### 9) Admin startup behavior (UAC auto-elevation)
+- Added startup auto-elevation flow when script is launched without admin rights.
+- Script now requests UAC (`RunAs`) and relaunches itself as Administrator.
+- Startup parameters are preserved during relaunch (`-Silent`, `-Task`, `-Language`, `-ProxyAddress`, `-FilterClass`, `-FilterManufacturer`).
+- Non-admin instance exits after successful handoff; startup aborts if UAC is declined.
+
 ## Files in this PR
 - `DriveUpdateV3.1.ps1` (new)
 - `README.md` (updated for v3.1 usage and features)
@@ -65,4 +71,5 @@ This PR contains only the delta from `DriveUpdateV3.ps1` (v3.0) to `DriveUpdateV
   - `.\DriveUpdateV3.1.ps1 -Silent -Task "InstallDriverUpdates"`
 - Verify schedule creates an auto-install task (not check-only).
 - Verify cancel behavior removes temp artifacts and stops running job safely.
+- Start script without admin rights and verify UAC relaunch behavior.
 
