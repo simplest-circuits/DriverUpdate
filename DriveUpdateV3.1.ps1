@@ -20,6 +20,17 @@ foreach ($entry in $PSBoundParameters.GetEnumerator()) {
 
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
+Add-Type @"
+using System;
+using System.Runtime.InteropServices;
+public static class ConsoleWindow {
+    [DllImport("kernel32.dll")]
+    public static extern IntPtr GetConsoleWindow();
+
+    [DllImport("user32.dll")]
+    public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+}
+"@
 
 # -------------------------
 # Multi-Language Support
@@ -385,7 +396,7 @@ function Assert-AdminPrivilege {
         if (-not $scriptPath) { $scriptPath = $MyInvocation.PSCommandPath }
 
         if ($scriptPath) {
-            $argParts = @("-ExecutionPolicy Bypass", "-File `"$scriptPath`"")
+            $argParts = @("-ExecutionPolicy Bypass", "-WindowStyle Hidden", "-File `"$scriptPath`"")
 
             foreach ($key in $script:StartupBoundParameters.Keys) {
                 $value = $script:StartupBoundParameters[$key]
@@ -418,6 +429,17 @@ function Assert-AdminPrivilege {
     }
 }
 Assert-AdminPrivilege
+
+function Hide-ConsoleWindow {
+    if ($Silent) { return }
+    try {
+        $consoleHandle = [ConsoleWindow]::GetConsoleWindow()
+        if ($consoleHandle -ne [IntPtr]::Zero) {
+            [void][ConsoleWindow]::ShowWindow($consoleHandle, 0)
+        }
+    } catch {}
+}
+Hide-ConsoleWindow
 
 # -------------------------
 # Globals and paths

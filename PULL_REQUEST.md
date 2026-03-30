@@ -56,6 +56,7 @@ This PR contains only the delta from `DriveUpdateV3.ps1` (v3.0) to `DriveUpdateV
 ### 9) Admin startup behavior (UAC auto-elevation)
 - Added startup auto-elevation flow when script is launched without admin rights.
 - Script now requests UAC (`RunAs`) and relaunches itself as Administrator.
+- Admin relaunch now starts with hidden PowerShell window style for UI mode.
 - Startup parameters are preserved during relaunch (`-Silent`, `-Task`, `-Language`, `-ProxyAddress`, `-FilterClass`, `-FilterManufacturer`).
 - Non-admin instance exits after successful handoff; startup aborts if UAC is declined.
 
@@ -72,4 +73,5 @@ This PR contains only the delta from `DriveUpdateV3.ps1` (v3.0) to `DriveUpdateV
 - Verify schedule creates an auto-install task (not check-only).
 - Verify cancel behavior removes temp artifacts and stops running job safely.
 - Start script without admin rights and verify UAC relaunch behavior.
+- Verify elevated UI runs without visible background PowerShell console window.
 

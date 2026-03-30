@@ -14,7 +14,7 @@ This README documents only functionality present in `DriveUpdateV3.1.ps1`.
 powershell -ExecutionPolicy Bypass -File .\DriveUpdateV3.1.ps1
 ```
 
-If started without admin rights, the script now triggers a UAC prompt and relaunches itself as Administrator with the same startup parameters.
+If started without admin rights, the script triggers a UAC prompt and relaunches itself as Administrator with the same startup parameters.
 
 ## Script Parameters
 
@@ -29,6 +29,7 @@ If started without admin rights, the script now triggers a UAC prompt and relaun
 
 - Checks for Administrator rights at startup.
 - If not elevated, relaunches itself with `powershell.exe -Verb RunAs`.
+- Relaunch uses hidden window style for the PowerShell host during admin UI startup.
 - Preserves provided startup arguments (for example: `-Silent`, `-Task`, `-Language`, `-ProxyAddress`, `-FilterClass`, `-FilterManufacturer`).
 - Original non-admin process exits after handing off to elevated process.
 - If UAC is canceled, startup is aborted.
@@ -54,6 +55,7 @@ If started without admin rights, the script now triggers a UAC prompt and relaun
 - Configure class/manufacturer filters
 - View update history
 - Schedule automatic silent install task (Daily/Weekly/Monthly)
+- Hides the background PowerShell console while the admin UI is running
 
 ## Silent Mode (Implemented Tasks)
 
