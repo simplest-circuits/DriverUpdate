@@ -5,19 +5,19 @@
 
 A PowerShell GUI tool to check, download, and install Windows driver updates with logging, filtering, scheduling, and silent automation support.
 
-![Driver Updater Screenshot](https://raw.githubusercontent.com/CHXRITH/DriverUpdate/main/screenshot.png)
+![Driver Updater Screenshot](https://github.com/user-attachments/assets/e97ee19f-903b-4162-8c95-585122432cae)
 
 ## Features
 
 - Modern WinForms UI with dark/light theme
 - Multi-language interface (`en`, `es`, `fr`, `de`, `pt`, `it`)
-- **New in v3.1:** guided **Update Wizard** (step-by-step flow)
-- **New in v3.1:** dedicated **Install Updates** action for driver updates
+- New in v3.1: guided Update Wizard (step-by-step flow)
+- New in v3.1: dedicated Install Updates action for driver updates
 - Driver update check with manufacturer/class filters
 - Driver backup and install-from-folder (`.inf`) support
 - Update history and per-task log files
 - Proxy settings and persistent app settings
-- Scheduled **auto-install** task support
+- Scheduled auto-install task support
 - Cooperative cancel with temporary file cleanup
 
 ## Requirements
@@ -44,12 +44,12 @@ powershell -ExecutionPolicy Bypass -File .\DriveUpdateV3.ps1
 ## v3.1 Workflow
 
 1. Open the app as Administrator
-2. Run **Update Wizard** (`F5`) for guided update flow
+2. Run Update Wizard (`F5`) for guided update flow
 3. Or use:
-   - **Check Driver Updates** (`F6`)
-   - **Install Updates** (`F8`)
-   - **Scan Installed Drivers** (`F7`)
-4. Use **Tools** for restore point, filters, schedule, and history
+   - Check Driver Updates (`F6`)
+   - Install Updates (`F8`)
+   - Scan Installed Drivers (`F7`)
+4. Use Tools for restore point, filters, schedule, and history
 5. Check logs in `Documents\The CHARITH_DriverUpdater`
 
 ## Silent Mode
@@ -83,17 +83,17 @@ Optional filter/proxy parameters:
 
 ## Scheduled Auto-Install
 
-The schedule feature now creates an automatic driver install task (silent mode with `InstallDriverUpdates`) at the selected frequency and time.
+The schedule feature creates an automatic driver install task (silent mode with `InstallDriverUpdates`) at the selected frequency and time.
 
 ## Version History
 
-- **v3.1**
+- v3.1
   - Added Update Wizard flow
   - Added Install Updates action (GUI + silent mode)
   - Added cache reuse for recent update checks before install
   - Improved cancellation with cancel token and temp cleanup
   - Updated schedule behavior to auto-install driver updates
-- **v3.0**
+- v3.0
   - Added multi-language support
   - Added settings, filters, history, and proxy support
   - Added backup/install-from-folder and restore point actions
