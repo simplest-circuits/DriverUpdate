@@ -89,3 +89,8 @@ Files used by the script:
 ## License
 
 MIT (`LICENSE`)
+
+---
+
+Made with 💜 by TheCHARITH
+Organization: Simplest Circuits
