@@ -1,70 +1,61 @@
-# Windows Driver Updater v3.1
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![PowerShell](https://img.shields.io/badge/PowerShell-%235391FE.svg?style=flat&logo=powershell&logoColor=white)](https://github.com/PowerShell/PowerShell)
-[![Windows](https://img.shields.io/badge/Windows-0078D6?style=flat&logo=windows&logoColor=white)](https://www.microsoft.com/windows)
+# Driver Updater v3.1
 
-A PowerShell GUI tool to check, download, and install Windows driver updates with logging, filtering, scheduling, and silent automation support.
-
-![Driver Updater Screenshot](https://github.com/user-attachments/assets/e97ee19f-903b-4162-8c95-585122432cae)
-
-## Features
-
-- Modern WinForms UI with dark/light theme
-- Multi-language interface (`en`, `es`, `fr`, `de`, `pt`, `it`)
-- New in v3.1: guided Update Wizard (step-by-step flow)
-- New in v3.1: dedicated Install Updates action for driver updates
-- Driver update check with manufacturer/class filters
-- Driver backup and install-from-folder (`.inf`) support
-- Update history and per-task log files
-- Proxy settings and persistent app settings
-- Scheduled auto-install task support
-- Cooperative cancel with temporary file cleanup
+This README documents only functionality present in `DriveUpdateV3.1.ps1`.
 
 ## Requirements
 
-- Windows 10 or Windows 11
-- PowerShell 5.1+
-- Administrator privileges
-- Internet connection for update checks/downloads
+- Windows 10/11
+- PowerShell 5.1 or newer
+- Administrator privileges (script exits otherwise)
 
-## Run
-
-Run one of the scripts as Administrator:
+## Start
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\DriveUpdateV3.1.ps1
 ```
 
-Legacy script still available:
+## Script Parameters
 
-```powershell
-powershell -ExecutionPolicy Bypass -File .\DriveUpdateV3.ps1
-```
+- `-Silent` (switch): run without GUI and execute one task
+- `-Task` (string): silent task name
+- `-Language` (string): `en`, `es`, `fr`, `de`, `pt`, `it`
+- `-ProxyAddress` (string): proxy URL
+- `-FilterClass` (string): driver class filter
+- `-FilterManufacturer` (string): manufacturer filter
 
-## v3.1 Workflow
+## Implemented GUI Functionality
 
-1. Open the app as Administrator
-2. Run Update Wizard (`F5`) for guided update flow
-3. Or use:
-   - Check Driver Updates (`F6`)
-   - Install Updates (`F8`)
-   - Scan Installed Drivers (`F7`)
-4. Use Tools for restore point, filters, schedule, and history
-5. Check logs in `Documents\The CHARITH_DriverUpdater`
+- Multi-language UI (`en`, `es`, `fr`, `de`, `pt`, `it`)
+- Dark/Light theme toggle
+- Check driver updates
+- Install available driver updates
+- Scan installed drivers and export CSV
+- Backup installed drivers (`dism /export-driver`)
+- Install drivers from folder (`pnputil` with `.inf`)
+- Update Wizard with selectable steps:
+  - check updates
+  - backup drivers
+  - download updates
+  - install updates
+- Cancel running task
+- Open log folder
+- Create system restore point
+- Configure proxy settings
+- Configure class/manufacturer filters
+- View update history
+- Schedule automatic silent install task (Daily/Weekly/Monthly)
 
-## Silent Mode
-
-General format:
+## Silent Mode (Implemented Tasks)
 
 ```powershell
 .\DriveUpdateV3.1.ps1 -Silent -Task "<TaskName>"
 ```
 
-Available tasks:
+Valid task names:
 
 - `WindowsUpdate`
 - `CheckDriverUpdates`
-- `InstallDriverUpdates` (new in v3.1)
+- `InstallDriverUpdates`
 - `ScanDrivers`
 
 Examples:
@@ -75,29 +66,26 @@ Examples:
 .\DriveUpdateV3.1.ps1 -Silent -Task "ScanDrivers"
 ```
 
-Optional filter/proxy parameters:
+Silent mode can be combined with:
 
 ```powershell
 .\DriveUpdateV3.1.ps1 -Silent -Task "InstallDriverUpdates" -FilterManufacturer "Intel" -FilterClass "Display" -ProxyAddress "http://proxy:8080"
 ```
 
-## Scheduled Auto-Install
+## Data and Logs
 
-The schedule feature creates an automatic driver install task (silent mode with `InstallDriverUpdates`) at the selected frequency and time.
+The script stores files in:
 
-## Version History
+- `%USERPROFILE%\Documents\The CHARITH_DriverUpdater`
 
-- v3.1
-  - Added Update Wizard flow
-  - Added Install Updates action (GUI + silent mode)
-  - Added cache reuse for recent update checks before install
-  - Improved cancellation with cancel token and temp cleanup
-  - Updated schedule behavior to auto-install driver updates
-- v3.0
-  - Added multi-language support
-  - Added settings, filters, history, and proxy support
-  - Added backup/install-from-folder and restore point actions
+Files used by the script:
+
+- `Settings.json`
+- `UpdateHistory.json`
+- task log files (`*.log`)
+- scan export files (`InstalledDrivers_*.csv`)
+- temporary task folder under `Temp\` (created/cleaned during tasks)
 
 ## License
 
-This project is licensed under the MIT License. See `LICENSE` for details.
+MIT (`LICENSE`)
